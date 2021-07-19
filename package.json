@@ -1,0 +1,29 @@
+{
+  "name": "utilizing-cores-with-express",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon projectsource/main.js",
+    "testload": "loadtest -n 10000 http://localhost:4000/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/preethamb97/utilizing-cores-with-express.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/preethamb97/utilizing-cores-with-express/issues"
+  },
+  "homepage": "https://github.com/preethamb97/utilizing-cores-with-express#readme",
+  "dependencies": {
+    "cluster": "0.7.7",
+    "express": "4.17.1",
+    "helmet": "4.6.0",
+    "loadtest": "5.1.2",
+    "morgan": "1.10.0",
+    "nodemon": "2.0.12"
+  }
+}
