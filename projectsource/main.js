@@ -10,26 +10,30 @@ const router = express.Router();
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server, { allowEIO3: true });
-// var io = require('socket.io')(server, {'transports': ['websocket', 'polling']});
 const opencv = require('opencv4nodejs');
 
 const numOfCPUs = cpus().length;
 var isVideoStreamingLive = false;
 
 if (WEB_CAM_STREAMING_STATUS) {
-  const videoCapture = new opencv.VideoCapture(0);
-  videoCapture.set(opencv.CAP_PROP_FRAME_WIDTH, 300);
-  videoCapture.set(opencv.CAP_PROP_FRAME_HEIGHT, 300);
-  setInterval(() => {
-    const frame = videoCapture.read();
-    if (frame.step > 0) {
-      isVideoStreamingLive = true;
-      const image = opencv.imencode('.jpg', frame).toString('base64');
-      io.emit('image', image);
-    } else {
-      isVideoStreamingLive = false;
-    }
-  }, 1000 / STREAM_FRAMES);
+  try {
+    const videoCapture = new opencv.VideoCapture(0);
+    videoCapture.set(opencv.CAP_PROP_FRAME_WIDTH, 300);
+    videoCapture.set(opencv.CAP_PROP_FRAME_HEIGHT, 300);
+    setInterval(() => {
+      const frame = videoCapture.read();
+      if (frame.step > 0) {
+        isVideoStreamingLive = true;
+        const image = opencv.imencode('.jpg', frame).toString('base64');
+        io.emit('image', image);
+      } else {
+        isVideoStreamingLive = false;
+      }
+    }, 1000 / STREAM_FRAMES);
+  } catch (err) {
+    isVideoStreamingLive = false;
+    console.log('cannot start webcam', err);
+  }
 }
 
 router.get('*', (req, res, next) => {
